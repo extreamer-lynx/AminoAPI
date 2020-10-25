@@ -1,0 +1,9 @@
+E:\Users\proj\lib_amino_js\ConsoleApp1\AminoLib\bin\Debug\netcoreapp2.1\AminoLib.deps.json
+E:\Users\proj\lib_amino_js\ConsoleApp1\AminoLib\bin\Debug\netcoreapp2.1\AminoLib.dll
+E:\Users\proj\lib_amino_js\ConsoleApp1\AminoLib\bin\Debug\netcoreapp2.1\AminoLib.pdb
+E:\Users\proj\lib_amino_js\ConsoleApp1\AminoLib\obj\Debug\netcoreapp2.1\AminoLib.csprojAssemblyReference.cache
+E:\Users\proj\lib_amino_js\ConsoleApp1\AminoLib\obj\Debug\netcoreapp2.1\AminoLib.csproj.CoreCompileInputs.cache
+E:\Users\proj\lib_amino_js\ConsoleApp1\AminoLib\obj\Debug\netcoreapp2.1\AminoLib.AssemblyInfoInputs.cache
+E:\Users\proj\lib_amino_js\ConsoleApp1\AminoLib\obj\Debug\netcoreapp2.1\AminoLib.AssemblyInfo.cs
+E:\Users\proj\lib_amino_js\ConsoleApp1\AminoLib\obj\Debug\netcoreapp2.1\AminoLib.dll
+E:\Users\proj\lib_amino_js\ConsoleApp1\AminoLib\obj\Debug\netcoreapp2.1\AminoLib.pdb

@@ -1,0 +1,14 @@
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\bin\Debug\netcoreapp2.1\ConsoleApp1.deps.json
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\bin\Debug\netcoreapp2.1\ConsoleApp1.runtimeconfig.json
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\bin\Debug\netcoreapp2.1\ConsoleApp1.runtimeconfig.dev.json
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\bin\Debug\netcoreapp2.1\ConsoleApp1.dll
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\bin\Debug\netcoreapp2.1\ConsoleApp1.pdb
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\bin\Debug\netcoreapp2.1\AminoLib.dll
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\bin\Debug\netcoreapp2.1\AminoLib.pdb
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.csprojAssemblyReference.cache
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.csproj.CoreCompileInputs.cache
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.AssemblyInfoInputs.cache
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.AssemblyInfo.cs
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.csproj.CopyComplete
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.dll
+E:\Users\proj\lib_amino_js\ConsoleApp1\ConsoleApp1\obj\Debug\netcoreapp2.1\ConsoleApp1.pdb
