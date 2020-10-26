@@ -26,7 +26,7 @@ namespace AminoLib
         private const string prefix = "https://service.narvii.com/api/v1";
 
 
-        public AminoClient (string deviceId, string email, string password)
+        public AminoClient(string deviceId, string email, string password)
         {
             this.deviceId = deviceId;
             this.email = email;
@@ -34,9 +34,129 @@ namespace AminoLib
             Login();
         }
 
+        public enum usersType
+        {
+            Curators = 1,
+            Featured = 2,
+            Leaders = 3,
+            Summary = 4
+        };
+
+        // --- USER ENDPOINT ---
+
+        public string getHeadlines(int start, int size)
+        {
+            return get(prefix + "/g/s/feed/headlines?start=" + start + "&size=" + size, "");
+        }
+
+        public string getAccount()
+        {
+            return get(prefix + "/g/s/account", "");
+
+        }
+
+        public string getAffiliations()
+        {
+            return get(prefix + "/g/s/account/affiliations?type=active", "");
+        }
+
+        public string getWallet()
+        {
+            return get(prefix + "/g/s/wallet", "");
+        }
+
+        public string getAUID()
+        {
+            return get(prefix + "/g/s/auid?deviceId="+this.deviceId, "");
+        }
+
+        public string getPublickBlockList()
+        {
+            return get(prefix + "/g/s/block/full-list", "");
+        }
+
+        public string searchUser(string query)
+        {
+            return get(prefix + "/g/s/search/amino-id-and-link?q=" + query + "&searchId=" + getTimeSig(), "");
+        }
+
+        public string getMembership()
+        {
+            return get(prefix + "/g/s/membership", "");
+        }
+
+
+        // --- COMUNIITY ENDPOINT ---
+
+        public string getCommunityInfo(int ndcId)
+        {
+            return get(prefix + "/g/s-x"+ndcId+"/community/info?withInfluencerList=1&withTopicList=true", "");
+        }
+
+        public string getCommunityKindred(int ndcId, int start, int size)
+        {
+            return get(prefix + "/g/s-x" + ndcId + "/community/kindred?start=" + start + "&size=" + size, "");
+        }
+
         public string getCommunities(int start, int size)
         {
-           return post(prefix+"/g/s/community/joined?start=" + start + "&size="+ size, "");
+            return post(prefix + "/g/s/community/joined?start=" + start + "&size=" + size, "");
+        }
+
+        public string linkIdentify(string url)
+        {
+            return get(prefix + "/g/s/community/link-identify?q=" + url, "");
+        }
+
+        public string getCommunityBlogCategory(int ndcId, int size)
+        {
+            return get(prefix + "/x" + ndcId + "/s/blog-category?size="+ size, "");
+        }
+
+        public string checkIn(int ndcId, int timezone)
+        {
+            string body = "{ \"timezone\":" + timezone + ", \"timestamp\":"+getTimestamp()+" }";
+            return post(prefix + "/x" + ndcId + "/s/check-in", body);
+        }
+
+        public string checkInLottery(int ndcId, int timezone)
+        {
+            string body = "{ \"timezone\":" + timezone + ", \"timestamp\":" + getTimestamp() + " }";
+            return post(prefix + "/x" + ndcId + "/s/check-in/lottery", body);
+        }
+
+        public string joinCommunity(int ndcId)
+        {
+            return post(prefix + "/x" + ndcId + "/s/community/join", "");
+        }
+
+        public string leaveCommunity(int ndcId)
+        {
+            return post(prefix + "/x" + ndcId + "/s/community/leave", "");
+        }
+
+        public string getStickerCollection(int ndcId)
+        {
+            return get(prefix + "/x" + ndcId + "/s/sticker-collection?type=my-active-collection&includeStickers=true", "");
+        }
+        
+        public string getUserProfiles(int ndcId, usersType type, int start, int size)
+        {
+            string types = type == usersType.Curators ? "curators" : type == usersType.Featured ? "featured" : type == usersType.Leaders ? "leaders" : type == usersType.Summary ? "summary" : null;
+            return get(prefix + "/x" + ndcId + "/s/user-profile?type=" + types+"&start=" + start + "&size=" + size, "");
+        }
+
+
+        // --- CHAT ENDPOINT ---
+
+        public string joinCommunityChat(int ndcId, string threadId, string uid)
+        {
+            return post(prefix + "/x" + ndcId + "/s/chat/thread/"+ threadId + "/member/" + uid, "");
+        }
+
+        public string leaveCommunityChat(int ndcId, string threadId, string uid)
+        {
+            return delete(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/member/" + uid, "");
         }
 
         public string getComunnityJoinedChats(int ndcId, int start, int size)
@@ -63,10 +183,28 @@ namespace AminoLib
             return post(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/message", body);
         }
 
+        public string deleteMessage(int ndcId, string threadId, string message)
+        {
+            return delete(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/message/" + message,"");
+        }
+
+
+        // --- LIVE LAYER ---
+
+        public string liveLayersPublicChats(int ndcId, int start, int size)
+        {
+            return get(prefix + "/x" + ndcId + "/s/live-layer/public-chats?start=" + start + "&size=" + size, "");
+        }
+
+        public string liveLayersUsersOnline(int ndcId, int start, int size)
+        {
+            return get(prefix + "/x" + ndcId + "/s/live-layer?topic=ndtopic%3Ax$"+ndcId+ "%3Aonline-members&start=" + start + "&size=" + size, "");
+        }
+
+        // --- WORKERS ---
+
         private void Login()
         {
-            try
-            {
                 WebRequest request = WebRequest.Create(prefix + "/g/s/auth/login");
                 request.Headers.Add(HttpRequestHeader.UserAgent, "Dalvik/2.1.0 (Linux; U; Android 10; Redmi 8A Build/QKQ1.191014.001 test; com.narvii.amino.master/3.4.33453)");
                 request.Headers.Add("NDCDEVICEID", this.deviceId);
@@ -78,7 +216,7 @@ namespace AminoLib
                 using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                 {
                     string json = "{\"email\": \"" + this.email + "\"," +
-                                  "\"secret\": \"0 " +this.password + "\"," +
+                                  "\"secret\": \"0 " + this.password + "\"," +
                                   "\"deviceID\":\"" + this.deviceId + "\"," +
                                   "\"clientType\": 100," +
                                   "\"action\": \"normal\" ," +
@@ -94,7 +232,8 @@ namespace AminoLib
                     {
 
                         JObject jObject = JObject.Parse(reader.ReadLine());
-                        foreach (var pair in jObject) {
+                        foreach (var pair in jObject)
+                        {
                             if (pair.Key == "auid")
                                 this.auid = pair.Value.ToString();
                             if (pair.Key == "sid")
@@ -104,11 +243,6 @@ namespace AminoLib
                     this.isLogined = true;
                 }
                 response.Close();
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
 
         }
 
@@ -125,17 +259,89 @@ namespace AminoLib
             return ((DateTimeOffset)foo).ToUnixTimeSeconds();
         }
 
-
-        //workers
         private string post(string url, string json)
         {
             WebRequest request = WebRequest.Create(url);
             request.Headers.Add(HttpRequestHeader.UserAgent, "Dalvik/2.1.0 (Linux; U; Android 10; Redmi 8A Build/QKQ1.191014.001 test; com.narvii.amino.master/3.4.33453)");
             request.Headers.Add("NDCDEVICEID", this.deviceId);
             request.Headers.Add("NDCAUTH", "sid=" + this.sid);
+            request.Headers.Add("AUID", this.auid);
+            request.Headers.Add("NDCLANG", "en");
             request.Headers.Add("NDC-MSG-SIG", getMessageSignature());
             request.ContentType = "application/json; charset=utf-8";
             request.Method = "POST";
+
+            if (json != "")
+            {
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(json);
+                }
+            }
+            string resJson = "";
+            WebResponse response = request.GetResponse();
+            using (Stream stream = response.GetResponseStream())
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string line = "";
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        resJson += line;
+                    }
+                }
+            }
+            response.Close();
+            return resJson;
+        }
+
+        private string get(string url, string json)
+        {
+            WebRequest request = WebRequest.Create(url);
+            request.Headers.Add(HttpRequestHeader.UserAgent, "Dalvik/2.1.0 (Linux; U; Android 10; Redmi 8A Build/QKQ1.191014.001 test; com.narvii.amino.master/3.4.33453)");
+            request.Headers.Add("NDCDEVICEID", this.deviceId);
+            request.Headers.Add("NDCAUTH", "sid=" + this.sid);
+            request.Headers.Add("AUID", this.auid);
+            request.Headers.Add("NDCLANG", "en");
+            request.Headers.Add("NDC-MSG-SIG", getMessageSignature());
+            request.ContentType = "application/json; charset=utf-8";
+            request.Method = "GET";
+
+            if (json != "")
+            {
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(json);
+                }
+            }
+            string resJson = "";
+            WebResponse response = request.GetResponse();
+            using (Stream stream = response.GetResponseStream())
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string line = "";
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        resJson += line;
+                    }
+                }
+            }
+            response.Close();
+            return resJson;
+        }
+
+        private string delete(string url, string json)
+        {
+            WebRequest request = WebRequest.Create(url);
+            request.Headers.Add(HttpRequestHeader.UserAgent, "Dalvik/2.1.0 (Linux; U; Android 10; Redmi 8A Build/QKQ1.191014.001 test; com.narvii.amino.master/3.4.33453)");
+            request.Headers.Add("NDCDEVICEID", this.deviceId);
+            request.Headers.Add("NDCAUTH", "sid=" + this.sid);
+            request.Headers.Add("AUID", this.auid);
+            request.Headers.Add("NDCLANG", "en");
+            request.Headers.Add("NDC-MSG-SIG", getMessageSignature());
+            request.ContentType = "application/json; charset=utf-8";
+            request.Method = "DELETE";
 
 
             if (json != "")
@@ -166,6 +372,12 @@ namespace AminoLib
         {
             TimeBasedGenerator gen = new TimeBasedGenerator();
             return gen.GenerateGuid().ToString().Replace("-","").ToUpper().Substring(0,27);
+        }
+
+        private string getTimeSig()
+        {
+            TimeBasedGenerator gen = new TimeBasedGenerator();
+            return gen.GenerateGuid().ToString();
         }
     }
 }
