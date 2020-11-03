@@ -188,6 +188,66 @@ namespace AminoLib
             return delete(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/message/" + message,"");
         }
 
+        public string sendAvesomeMessage(int ndcId, string threadId, string content)
+        {
+            long timestamp = getSecondTimestamp();
+            string body = "{\"attachedObject\": null, \"content\": \"" + content + " \"," +
+                " \"type\": 100, \"clientRefId\": " + timestamp + " , \"timestamp\": " + timestamp + "} ";
+
+            return post(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/message", body);
+        }
+
+        public string getTippingList(int ndcId, string threadId, int start, int size)
+        {
+            return get(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/tipping/tipped-users?start=" + start + "&size=" + size, "");
+        }
+
+        public string tipChat(int ndcId, string threadId, int coins)
+        {
+            string body = "{\"coins\": "+coins+ ",\"tippingContext\": {\"transactionId\":\"" + getTimeSig() + "\"}, \"timestamp\":" + getTimestamp() + "}";
+            return post(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/tipping", body);
+        }
+
+        // --- CO-HOST ---
+
+        public string getCoHostList(int ndcId, string threadId, int start, int size)
+        {
+            return get(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/member?type=co-host&start=" + start + "&size=" + size, "");
+        }
+
+        public string addCoHost(int ndcId, string threadId, string uid)
+        {
+            string body = "{\"uidList\": [\""+uid+"\"], \"timestamp\":"+getTimestamp()+"}";
+            return post(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/co-host", body);
+        }
+
+        public string changeAnouncement(int ndcId, string threadId, string message)
+        {
+            string body = "{\"extensions\": {\"announcement\": \""+message+"\"}, \"timestamp\":" + getTimestamp() + "}";
+            return post(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId, body);
+        }
+
+        public string inviteUsers(int ndcId, string threadId, string uid)
+        {
+            string body = "{\"uids\": [\"" + uid + "\"], \"timestamp\":" + getTimestamp() + "}";
+            return post(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/member/invite", body);
+        }
+
+        public string deleteFromChat(int ndcId, string threadId, string uid)
+        {
+            return delete(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/member/" + uid + "?allowRejoin=0", "");
+        }
+
+        public string deleteFromChatWithFlag(int ndcId, string threadId, string uid)
+        {
+            return delete(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/member/"+uid+ "?allowRejoin=1", "");
+        }
+
+        public string changeVVChatPremision(int ndcId, string threadId, int type)
+        {
+            string body = "{\"vvChatJoinType\": " + type + ", \"timestamp\":" + getTimestamp() + "}";
+            return post(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/vvchat-permission", body);
+        }
 
         // --- LIVE LAYER ---
 
