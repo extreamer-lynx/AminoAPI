@@ -212,7 +212,7 @@ namespace AminoLib
 
         public string getCoHostList(int ndcId, string threadId, int start, int size)
         {
-            return get(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/member?type=co-host&start=" + start + "&size=" + size, "");
+            return get(prefix + "/x" + ndcId + "/s/chat/thread/" + threadId + "/co-host?size=" + size, "");
         }
 
         public string addCoHost(int ndcId, string threadId, string uid)
